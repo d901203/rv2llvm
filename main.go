@@ -24,9 +24,11 @@ func main() {
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
 	}
-	elf := NewELF(file)
-	builder := NewIrBuilder(elf)
-	builder.BuildIr(elf.Insts)
-	builder.SetAddrBlk()
-	builder.StoreIR()
+	if file != "" {
+		elf := NewELF(file)
+		builder := NewIrBuilder(elf)
+		builder.BuildIr(elf.Insts)
+		builder.SetAddrBlk()
+		builder.StoreIR()
+	}
 }
