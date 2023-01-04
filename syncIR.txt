@@ -1,0 +1,947 @@
+package main
+
+// import (
+// 	"github.com/llir/llvm/ir"
+// 	"github.com/llir/llvm/ir/constant"
+// 	"github.com/llir/llvm/ir/enum"
+// 	"github.com/llir/llvm/ir/types"
+// )
+
+// func (builder *IrBuilder) LUI() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("LUI"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("LUI", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("imm", types.I64))
+// 		blk := f.NewBlock("")
+// 		blk.NewStore(f.Params[1], f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("LUI", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) AUIPC() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("AUIPC"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("AUIPC", types.Void,
+// 			ir.NewParam("rd", types.I64Ptr),
+// 			ir.NewParam("pc", types.I64Ptr),
+// 			ir.NewParam("imm", types.I64))
+// 		blk := f.NewBlock("")
+// 		pcVal := blk.NewLoad(types.I64, f.Params[1])
+// 		blk.NewStore(blk.NewAdd(pcVal, f.Params[2]), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("AUIPC", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) JAL() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("JAL"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("JAL", types.Void,
+// 			ir.NewParam("rd", types.I64Ptr),
+// 			ir.NewParam("pc", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		pcVal := blk.NewLoad(types.I64, f.Params[1])
+// 		blk.NewStore(blk.NewAdd(pcVal, constant.NewInt(types.I64, 4)), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("JAL", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) JALR() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("JALR"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("JALR", types.Void,
+// 			ir.NewParam("rd", types.I64Ptr),
+// 			ir.NewParam("pc", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		pcVal := blk.NewLoad(types.I64, f.Params[1])
+// 		blk.NewStore(blk.NewAdd(pcVal, constant.NewInt(types.I64, 4)), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("JALR", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) BEQ() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("BEQ"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("BEQ", types.I1,
+// 			ir.NewParam("rs1", types.I64Ptr),
+// 			ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[0])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[1])
+// 		cond := blk.NewICmp(enum.IPredEQ, rs1Val, rs2Val)
+// 		blk.NewRet(cond)
+// 		builder.IrFuncMap.Store("BEQ", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) BNE() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("BNE"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("BNE", types.I1,
+// 			ir.NewParam("rs1", types.I64Ptr),
+// 			ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[0])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[1])
+// 		cond := blk.NewICmp(enum.IPredNE, rs1Val, rs2Val)
+// 		blk.NewRet(cond)
+// 		builder.IrFuncMap.Store("BNE", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) BLT() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("BLT"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("BLT", types.I1,
+// 			ir.NewParam("rs1", types.I64Ptr),
+// 			ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[0])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[1])
+// 		cond := blk.NewICmp(enum.IPredSLT, rs1Val, rs2Val)
+// 		blk.NewRet(cond)
+// 		builder.IrFuncMap.Store("BLT", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) BGE() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("BGE"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("BGE", types.I1,
+// 			ir.NewParam("rs1", types.I64Ptr),
+// 			ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[0])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[1])
+// 		cond := blk.NewICmp(enum.IPredSGE, rs1Val, rs2Val)
+// 		blk.NewRet(cond)
+// 		builder.IrFuncMap.Store("BGE", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) BLTU() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("BLTU"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("BLTU", types.I1,
+// 			ir.NewParam("rs1", types.I64Ptr),
+// 			ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[0])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[1])
+// 		cond := blk.NewICmp(enum.IPredULT, rs1Val, rs2Val)
+// 		blk.NewRet(cond)
+// 		builder.IrFuncMap.Store("BLTU", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) BGEU() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("BGEU"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("BGEU", types.I1,
+// 			ir.NewParam("rs1", types.I64Ptr),
+// 			ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[0])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[1])
+// 		cond := blk.NewICmp(enum.IPredUGE, rs1Val, rs2Val)
+// 		blk.NewRet(cond)
+// 		builder.IrFuncMap.Store("BGEU", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) STORE() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("STORE"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("STORE", types.Void)
+// 		blk := f.NewBlock("")
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("STORE", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) ADDI() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("ADDI"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("ADDI", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("imm", types.I64))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		blk.NewStore(blk.NewAdd(rs1Val, f.Params[2]), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("ADDI", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) SLTI() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("SLTI"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("SLTI", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("imm", types.I64))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		result := blk.NewICmp(enum.IPredSLT, rs1Val, f.Params[2])
+// 		blk.NewStore(blk.NewZExt(result, types.I64), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("SLTI", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) SLTIU() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("SLTIU"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("SLTIU", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("imm", types.I64))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		result := blk.NewICmp(enum.IPredULT, rs1Val, f.Params[2])
+// 		blk.NewStore(blk.NewZExt(result, types.I64), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("SLTIU", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) XORI() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("XORI"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("XORI", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("imm", types.I64))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		blk.NewStore(blk.NewXor(rs1Val, f.Params[2]), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("XORI", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) ORI() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("ORI"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("ORI", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("imm", types.I64))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		blk.NewStore(blk.NewOr(rs1Val, f.Params[2]), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("ORI", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) ANDI() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("ANDI"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("ANDI", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("imm", types.I64))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		blk.NewStore(blk.NewAnd(rs1Val, f.Params[2]), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("ANDI", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) SLLI() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("SLLI"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("SLLI", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("shamt", types.I64))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		blk.NewStore(blk.NewShl(rs1Val, f.Params[2]), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("SLLI", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) SRLI() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("SRLI"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("SRLI", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("shamt", types.I64))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		blk.NewStore(blk.NewLShr(rs1Val, f.Params[2]), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("SRLI", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) SRAI() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("SRAI"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("SRAI", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("shamt", types.I64))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		blk.NewStore(blk.NewAShr(rs1Val, f.Params[2]), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("SRAI", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) ADD() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("ADD"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("ADD", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		blk.NewStore(blk.NewAdd(rs1Val, rs2Val), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("ADD", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) MUL() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("MUL"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("MUL", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		blk.NewStore(blk.NewMul(rs1Val, rs2Val), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("MUL", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) SUB() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("SUB"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("SUB", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		blk.NewStore(blk.NewSub(rs1Val, rs2Val), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("SUB", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) SLL() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("SLL"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("SLL", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		blk.NewStore(blk.NewShl(rs1Val, rs2Val), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("SLL", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) MULH() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("MULH"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("MULH", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		rs1Val32 := blk.NewTrunc(rs1Val, types.I32)
+// 		rs2Val32 := blk.NewTrunc(rs2Val, types.I32)
+// 		rs1Val64 := blk.NewSExt(rs1Val32, types.I64)
+// 		rs2Val64 := blk.NewSExt(rs2Val32, types.I64)
+// 		blk.NewStore(blk.NewMul(rs1Val64, rs2Val64), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("MULH", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) MULHSU() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("MULHSU"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("MULHSU", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		rs1Val32 := blk.NewTrunc(rs1Val, types.I32)
+// 		rs2Val32 := blk.NewTrunc(rs2Val, types.I32)
+// 		rs1Val64 := blk.NewSExt(rs1Val32, types.I64)
+// 		rs2Val64 := blk.NewZExt(rs2Val32, types.I64)
+// 		blk.NewStore(blk.NewMul(rs1Val64, rs2Val64), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("MULHSU", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) MULHU() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("MULHU"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("MULHU", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		rs1Val32 := blk.NewTrunc(rs1Val, types.I32)
+// 		rs2Val32 := blk.NewTrunc(rs2Val, types.I32)
+// 		rs1Val64 := blk.NewZExt(rs1Val32, types.I64)
+// 		rs2Val64 := blk.NewZExt(rs2Val32, types.I64)
+// 		blk.NewStore(blk.NewMul(rs1Val64, rs2Val64), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("MULHU", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) MULW() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("MULW"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("MULW", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		rs1Val32 := blk.NewTrunc(rs1Val, types.I32)
+// 		rs2Val32 := blk.NewTrunc(rs2Val, types.I32)
+// 		blk.NewStore(blk.NewSExt(blk.NewMul(rs1Val32, rs2Val32), types.I64), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("MULW", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) DIVW() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("DIVW"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("DIVW", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		rs1Val32 := blk.NewTrunc(rs1Val, types.I32)
+// 		rs2Val32 := blk.NewTrunc(rs2Val, types.I32)
+// 		blk.NewStore(blk.NewSExt(blk.NewSDiv(rs1Val32, rs2Val32), types.I64), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("DIVW", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) DIVUW() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("DIVUW"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("DIVUW", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		rs1Val32 := blk.NewTrunc(rs1Val, types.I32)
+// 		rs2Val32 := blk.NewTrunc(rs2Val, types.I32)
+// 		blk.NewStore(blk.NewSExt(blk.NewUDiv(rs1Val32, rs2Val32), types.I64), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("DIVUW", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) REMW() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("REMW"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("REMW", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		rs1Val32 := blk.NewTrunc(rs1Val, types.I32)
+// 		rs2Val32 := blk.NewTrunc(rs2Val, types.I32)
+// 		blk.NewStore(blk.NewSExt(blk.NewSRem(rs1Val32, rs2Val32), types.I64), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("REMW", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) REMUW() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("REMUW"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("REMUW", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		rs1Val32 := blk.NewTrunc(rs1Val, types.I32)
+// 		rs2Val32 := blk.NewTrunc(rs2Val, types.I32)
+// 		blk.NewStore(blk.NewSExt(blk.NewURem(rs1Val32, rs2Val32), types.I64), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("REMUW", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) SLT() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("SLT"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("SLT", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		result := blk.NewICmp(enum.IPredSLT, rs1Val, rs2Val)
+// 		blk.NewStore(blk.NewZExt(result, types.I64), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("SLT", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) SLTU() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("SLTU"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("SLTU", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		result := blk.NewICmp(enum.IPredULT, rs1Val, rs2Val)
+// 		blk.NewStore(blk.NewZExt(result, types.I64), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("SLTU", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) XOR() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("XOR"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("XOR", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		blk.NewStore(blk.NewXor(rs1Val, rs2Val), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("XOR", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) DIV() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("DIV"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("DIV", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		blk.NewStore(blk.NewSDiv(rs1Val, rs2Val), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("DIV", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) SRL() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("SRI"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("SRI", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		blk.NewStore(blk.NewLShr(rs1Val, rs2Val), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("SRI", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) SRA() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("SRA"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("SRA", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		blk.NewStore(blk.NewAShr(rs1Val, rs2Val), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("SRA", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) DIVU() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("DIVU"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("DIVU", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		blk.NewStore(blk.NewUDiv(rs1Val, rs2Val), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("DIVU", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) OR() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("OR"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("OR", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		blk.NewStore(blk.NewOr(rs1Val, rs2Val), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("OR", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) REM() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("REM"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("REM", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		blk.NewStore(blk.NewSRem(rs1Val, rs2Val), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("REM", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) REMU() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("REMU"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("REMU", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		blk.NewStore(blk.NewURem(rs1Val, rs2Val), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("REMU", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) AND() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("AND"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("AND", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		blk.NewStore(blk.NewAnd(rs1Val, rs2Val), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("AND", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) ADDIW() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("ADDIW"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("ADDIW", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("imm", types.I32))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs1Val32 := blk.NewTrunc(rs1Val, types.I32)
+// 		blk.NewStore(blk.NewSExt(blk.NewAdd(rs1Val32, f.Params[2]), types.I64), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("ADDIW", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) SLLIW() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("SLLIW"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("SLLIW", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("shamt", types.I32))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs1Val32 := blk.NewTrunc(rs1Val, types.I32)
+// 		blk.NewStore(blk.NewSExt(blk.NewShl(rs1Val32, f.Params[2]), types.I64), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("SLLIW", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) SRLIW() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("SRLIW"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("SRLIW", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("shamt", types.I32))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs1Val32 := blk.NewTrunc(rs1Val, types.I32)
+// 		blk.NewStore(blk.NewSExt(blk.NewLShr(rs1Val32, f.Params[2]), types.I64), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("SRLIW", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) SRAIW() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("SRAIW"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("SRAIW", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("shamt", types.I32))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs1Val32 := blk.NewTrunc(rs1Val, types.I32)
+// 		blk.NewStore(blk.NewSExt(blk.NewAShr(rs1Val32, f.Params[2]), types.I64), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("SRAIW", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) ADDW() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("ADDW"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("ADDW", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		rs1Val32 := blk.NewTrunc(rs1Val, types.I32)
+// 		rs2Val32 := blk.NewTrunc(rs2Val, types.I32)
+// 		blk.NewStore(blk.NewSExt(blk.NewAdd(rs1Val32, rs2Val32), types.I64), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("ADDW", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) SUBW() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("SUBW"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("SUBW", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		rs1Val32 := blk.NewTrunc(rs1Val, types.I32)
+// 		rs2Val32 := blk.NewTrunc(rs2Val, types.I32)
+// 		blk.NewStore(blk.NewSExt(blk.NewSub(rs1Val32, rs2Val32), types.I64), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("SUBW", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) SLLW() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("SLLW"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("SLLW", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs1Val32 := blk.NewTrunc(rs1Val, types.I32)
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		rs2Val32 := blk.NewTrunc(rs2Val, types.I32)
+// 		shamt := blk.NewAnd(rs2Val32, constant.NewInt(types.I32, 0x1f))
+// 		blk.NewStore(blk.NewSExt(blk.NewShl(rs1Val32, shamt), types.I64), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("SLLW", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) SRLW() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("SRLW"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("SRLW", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs1Val32 := blk.NewTrunc(rs1Val, types.I32)
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		rs2Val32 := blk.NewTrunc(rs2Val, types.I32)
+// 		shamt := blk.NewAnd(rs2Val32, constant.NewInt(types.I32, 0x1f))
+// 		blk.NewStore(blk.NewSExt(blk.NewLShr(rs1Val32, shamt), types.I64), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("SRLW", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) SRAW() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("SRAW"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("SRAW", types.Void, ir.NewParam("rd", types.I64Ptr), ir.NewParam("rs1", types.I64Ptr), ir.NewParam("rs2", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		rs1Val32 := blk.NewTrunc(rs1Val, types.I32)
+// 		rs2Val := blk.NewLoad(types.I64, f.Params[2])
+// 		rs2Val32 := blk.NewTrunc(rs2Val, types.I32)
+// 		shamt := blk.NewAnd(rs2Val32, constant.NewInt(types.I32, 0x1f))
+// 		blk.NewStore(blk.NewSExt(blk.NewAShr(rs1Val32, shamt), types.I64), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("SRAW", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) CLOSE() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("CLOSE"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("CLOSE", types.Void, ir.NewParam("fd", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		blk.NewStore(constant.NewInt(types.I64, 0), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("CLOSE", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) WRITE() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("WRITE"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("WRITE", types.Void, ir.NewParam("fd", types.I64Ptr), ir.NewParam("len", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		len := blk.NewLoad(types.I64, f.Params[1])
+// 		blk.NewStore(len, f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("WRITE", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) FSTAT() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("FSTAT"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("FSTAT", types.Void, ir.NewParam("fd", types.I64Ptr))
+// 		blk := f.NewBlock("")
+// 		blk.NewStore(constant.NewInt(types.I64, 0), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("FSTAT", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) BRK() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("BRK"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("BRK", types.Void)
+// 		blk := f.NewBlock("")
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("BRK", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) Printf() *ir.Func {
+// 	var printf *ir.Func
+// 	if v, ok := builder.IrFuncMap.Load("printf"); !ok {
+// 		printf := builder.Module.NewFunc("printf", types.I32, ir.NewParam("format", types.NewPointer(types.I8)))
+// 		printf.Sig.Variadic = true
+// 		builder.IrFuncMap.Store("printf", printf)
+// 		return printf
+// 	} else {
+// 		printf = v.(*ir.Func)
+// 	}
+// 	return printf
+// }
+
+// func NewCString(s string) *constant.CharArray {
+// 	return constant.NewCharArrayFromString(s + "\x00")
+// }
+
+// func (builder *IrBuilder) UpdatePC() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("SetPC"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("SetPC", types.Void, ir.NewParam("pc", types.I64))
+// 		blk := f.NewBlock("")
+// 		blk.NewStore(constant.NewInt(types.I64, 0), builder.IntRegs[0])
+// 		blk.NewStore(f.Params[0], builder.PC)
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("SetPC", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) UpdateJalPC() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("UpdateJalPC"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("UpdateJalPC", types.Void,
+// 			ir.NewParam("pc", types.I64Ptr),
+// 			ir.NewParam("imm", types.I64))
+// 		blk := f.NewBlock("")
+// 		pcVal := blk.NewLoad(types.I64, f.Params[0])
+// 		blk.NewStore(blk.NewAdd(pcVal, f.Params[1]), f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("UpdateJalPC", f)
+// 		return f
+// 	}
+// }
+
+// func (builder *IrBuilder) UpdateJalrPC() *ir.Func {
+// 	if v, ok := builder.IrFuncMap.Load("UpdateJalrPC"); ok {
+// 		return v.(*ir.Func)
+// 	} else {
+// 		f := builder.Module.NewFunc("UpdateJalrPC", types.Void,
+// 			ir.NewParam("pc", types.I64Ptr),
+// 			ir.NewParam("rs1", types.I64Ptr),
+// 			ir.NewParam("imm", types.I64))
+// 		blk := f.NewBlock("")
+// 		rs1Val := blk.NewLoad(types.I64, f.Params[1])
+// 		addVal := blk.NewAdd(rs1Val, f.Params[2])
+// 		andVal := blk.NewAnd(addVal, constant.NewInt(types.I64, -1))
+// 		blk.NewStore(andVal, f.Params[0])
+// 		blk.NewRet(nil)
+// 		builder.IrFuncMap.Store("UpdateJalrPC", f)
+// 		return f
+// 	}
+// }
