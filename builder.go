@@ -92,13 +92,6 @@ func (builder *IrBuilder) SetInitFunc(e *elf.File, buf []byte, start uint64, end
 	}
 }
 
-func max(a, b uint64) uint64 {
-	if a > b {
-		return a
-	}
-	return b
-}
-
 func min(a, b uint64) uint64 {
 	if a < b {
 		return a
@@ -138,11 +131,11 @@ func (builder *IrBuilder) SetAddrBlk() {
 }
 
 func (builder *IrBuilder) StoreIR() {
-	fileName := "out.ll"
+	fileName := "a.ll"
 	file, _ := os.Create(fileName)
 	_, err := builder.Module.WriteTo(file)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("Wrote IR to %s.\n", fileName)
+	fmt.Printf("Wrote IR to %s\n", fileName)
 }

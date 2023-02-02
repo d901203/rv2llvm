@@ -12,7 +12,7 @@ func main() {
 	app := &cli.App{
 		Name:      "rv2llvmSBT",
 		Usage:     "a tool to translate RISC-V ELF to LLVM IR.",
-		UsageText: "rv2llvmSBT [filename]",
+		UsageText: "rv2llvmSBT [RISC-V ELF FileName]",
 		Action: func(c *cli.Context) error {
 			if c.NArg() == 0 {
 				log.Fatal("No input file, use -h to see help.")
