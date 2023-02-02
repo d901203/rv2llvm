@@ -13,7 +13,7 @@
 
 - Go
 - Clang
-- RISC-V ELF files
+- RISC-V ELF files (some test cases are in the tests and build folder)
 
 ## Installation
 
