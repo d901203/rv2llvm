@@ -2,7 +2,7 @@ package main
 
 const (
 	StakcPointer uint64 = 1024 * 512 * 1
-	MemorySize   uint64 = 1024 * 1024 * 1
+	MemorySize   uint64 = 1024 * 1024 * 128
 	WriteMask           = 0b11111111
 )
 
