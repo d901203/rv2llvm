@@ -1,4 +1,4 @@
-APP = rv2llvmSBT
+APP = rv2llvm
 OUT = ./build
 
 .PHONY: all build clean

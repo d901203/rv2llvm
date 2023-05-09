@@ -1,6 +1,10 @@
-# rv2llvmSBT
+# rv2llvm
 
-`rv2llvmSBT` is a tool for translating RISC-V ELF files to LLVM IR. This project implements static binary translation, making it possible to run RISC-V ELF on different architecture systems.
+`rv2llvm` is a tool for translating RISC-V ELF files to LLVM IR. This project implements static binary translation, making it possible to run RISC-V ELF on different architecture systems.
+
+## Demo
+
+![demo.gif](./demo.gif)
 
 ## Features
 
@@ -18,8 +22,8 @@
 ## Installation
 
 ```
-git clone https://github.com/d901203/rv2llvmSBT
-cd rv2llvmSBT
+git clone https://github.com/d901203/rv2llvm
+cd rv2llvm
 make
 ```
 
@@ -29,5 +33,5 @@ make
 cd build
 ```
 
-1. Translate RISC-V ELF to LLVM IR: `./rv2llvmSBT [RISC-V ELF FileName]`
+1. Translate RISC-V ELF to LLVM IR: `./rv2llvm [RISC-V ELF FileName]`
 2. Translate LLVM IR to native architecture ELF: `clang [LLVM IR FileName]`
